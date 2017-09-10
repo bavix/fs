@@ -1,0 +1,15 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+    {% for item in items %}
+        <li class="list-group-item">
+            <i class="fa {{ item.getIcon() }}" aria-hidden="true"></i>
+            {% if item.getSize() %}
+                <span class="float-right badge badge-dark">{{ item.getSize() }}</span>
+            {% endif %}
+            <a href="{{ item.getPath() }}" title="{{ item.getName() }}">{{ item.getName() }}</a>
+            <br />
+            <small>{{ item.getTime() }}</small>
+        </li>
+    {% endfor %}
+{% endblock %}
