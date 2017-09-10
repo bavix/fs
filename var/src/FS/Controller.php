@@ -58,7 +58,7 @@ class Controller
             $dir = array_merge($folders, $files);
 
             return $this->twig()->render('directory.twig', [
-                'root'  => Common::root(),
+                'root'  => 'FS - ' . $this->uri(),
                 'items' => Arr::map($dir, function ($item) {
                     return new Item(Common::root(), $this->uri(), $item);
                 })
