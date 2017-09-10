@@ -54,7 +54,7 @@ class Controller
 
             sort($files);
             sort($folders);
-            
+
             $dir = array_merge($folders, $files);
 
             return $this->twig()->render('directory.twig', [
