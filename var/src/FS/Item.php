@@ -90,7 +90,7 @@ class Item
             return $this->uri . $this->name;
         }
 
-        return '/md0' . $this->uri . $this->name;
+        return '/' . basename($this->root) . $this->uri . $this->name;
     }
 
     public function getSize()

@@ -30,13 +30,6 @@ class Controller
     {
         $string = urldecode($string);
 
-        if (File::isFile($string))
-        {
-            // Stream::toUser();
-            var_dump($string);
-            die;
-        }
-
         if (Dir::isDir($string))
         {
             $dir = scandir($string, null);
@@ -58,7 +51,7 @@ class Controller
             $dir = array_merge($folders, $files);
 
             return $this->twig()->render('directory.twig', [
-                'root'  => 'FS - ' . $this->uri(),
+                'title' => 'FS - ' . $this->uri(),
                 'items' => Arr::map($dir, function ($item) {
                     return new Item(Common::root(), $this->uri(), $item);
                 })
