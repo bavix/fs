@@ -22,7 +22,7 @@ $worker->addFunction('size', function (GearmanJob $job) use ($client) {
 
     $workload = $job->workload();
 
-    if (preg_match('~/\.\.?/~', $workload) || null !== Common::cache()->get($workload))
+    if (is_link($workload) || preg_match('~/\.\.?/~', $workload) || null !== Common::cache()->get($workload))
     {
         return;
     }
