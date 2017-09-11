@@ -100,7 +100,7 @@ class Item
 
             if ($size)
             {
-                return Str::fileSize($size * 1024);
+                return Str::fileSize($size);
             }
 
             $client = new Client();

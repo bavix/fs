@@ -21,7 +21,7 @@ $worker->addFunction('size', function (GearmanJob $job) {
 
     $io   = popen('/usr/bin/du -sk \'' . str_replace('\'', '\\\'', $workload) . '\'', 'r');
     $size = fgets($io, 4096);
-    $size = substr($size, 0, strpos($size, "\t"));
+    $size = substr($size, 0, strpos($size, "\t")) * 1024;
     pclose($io);
 
     echo $workload . ' ' . \Bavix\Helpers\Str::fileSize($size) . PHP_EOL;
