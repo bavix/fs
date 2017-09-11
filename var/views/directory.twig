@@ -15,7 +15,7 @@
                     <span class="badge badge-dark">{{ item.getSize() }}</span>
                 </div>
             {% else %}
-                <a href="#">
+                <a download="{{ item.getName() }}.zip" href="{{ item.getPath() }}?download=zip">
                     <span class="float-right badge {% if item.getName() == '..' %}badge-danger{% else %}badge-dark{% endif %}">
                         <i class="fa fa-file-archive-o" aria-hidden="true"></i>
                         zip
