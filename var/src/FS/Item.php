@@ -31,7 +31,7 @@ class Item
     {
         if (!$this->stat)
         {
-            $this->stat = stat($this->path());
+            $this->stat = @stat($this->path());
         }
 
         return $this->stat[$type] ?? null;
