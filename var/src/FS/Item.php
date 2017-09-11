@@ -98,9 +98,9 @@ class Item
             $size = Common::cache()
                 ->get($this->path());
 
-            if (null !== $size)
+            if ($size)
             {
-                return $size ? Str::fileSize($size) : '0 B';
+                return Str::fileSize($size);
             }
 
             $client = new Client();
@@ -119,9 +119,7 @@ class Item
             return false;
         }
 
-        $size = $this->stat('size');
-
-        return $size ? Str::fileSize($size) : '0 B';
+        return Str::fileSize($this->stat('size'));
     }
 
     public function getTime()
