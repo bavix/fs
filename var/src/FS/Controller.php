@@ -35,7 +35,11 @@ class Controller
 
         if (File::isFile($string))
         {
+            $ext = pathinfo($string, PATHINFO_EXTENSION);
+            $mime = new \Mimey\MimeTypes();
+
             header('X-Accel-Redirect: /' . basename(Common::root()) . $this->uri(), true);
+            header('Content-Type: ' . $mime->getMimeType($ext), true);
             die;
         }
 
