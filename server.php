@@ -22,7 +22,7 @@ $worker->addFunction('size', function (GearmanJob $job) use ($client) {
 
     $workload = $job->workload();
 
-    if (Common::cache()->get($workload))
+    if (null !== Common::cache()->get($workload))
     {
         return;
     }
