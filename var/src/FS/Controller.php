@@ -33,6 +33,12 @@ class Controller
     {
         $string = urldecode($string);
 
+        if (File::isFile($string))
+        {
+            header('X-Accel-Redirect: /' . basename(Common::root()) . $this->uri(), true);
+            die;
+        }
+
         if (($_GET['download'] ?? null) === 'zip')
         {
             set_time_limit(0);
@@ -45,24 +51,8 @@ class Controller
             header('X-Accel-Redirect: ' . $tmp, true);
             header('Content-Type: application/zip', true);
             header('Content-Disposition: inline;filename="' . $filename . '.zip"', true);
-            //header('Content-Description: File Transfer');
-            //header('Content-Length: ' . filesize($file_realpath));
-            //header('Content-Transfer-Encoding: binary');
-            //header('Cache-Control: must-revalidate');
-            //header('Accept-Ranges: bytes');
-            //header('Pragma: public');
             header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 604800) . ' GMT', true);
-
             die;
-
-//            header('Content-Disposition: attachment; filename="' . basename($string) . '.zip"');
-//            header('Content-Type: application/octet-stream');
-//            header('Content-Description: File Transfer');
-//            header('Content-Length: ' . filesize($tmp));
-//            header('Cache-Control: must-revalidate');
-//            header('Pragma: public');
-//            header('Expires: 0');
-//            readfile($tmp);
         }
 
         if (Dir::isDir($string))
