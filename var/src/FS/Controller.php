@@ -43,7 +43,7 @@ class Controller
         {
             set_time_limit(0);
 
-            $tmp = new Tmp();
+            $tmp = new Tmp($string);
             shell_exec('cd ' . escapeshellcmd(dirname($string)) . '; zip -r \'' . $tmp . '\' \'' . escapeshellcmd(basename($string)) . '\' -0');
 
             $filename = str_replace(['"', "'", ' ', ','], '_', basename($string));
