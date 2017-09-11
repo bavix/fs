@@ -33,6 +33,8 @@ class Controller
 
         if (($_GET['download'] ?? null) === 'zip')
         {
+            set_time_limit(0);
+
             $tmp = new Tmp();
             shell_exec('cd ' . escapeshellcmd(dirname($string)) . '; zip -r \'' . $tmp . '\' \'' . escapeshellcmd(basename($string)) . '\' -0');
 
