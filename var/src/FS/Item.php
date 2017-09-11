@@ -88,7 +88,7 @@ class Item
             return $this->uri . $this->name;
         }
 
-        return '/' . basename($this->root) . $this->uri . $this->name;
+        return $this->uri . $this->name;
     }
 
     public function getFullSize()
