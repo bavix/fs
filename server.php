@@ -15,9 +15,19 @@ Common::bind('cache', Bavix\FS\Cache::class);
 $worker = new \Bavix\Gearman\Worker();
 $worker->addServer('127.0.0.1', 4730);
 
-$worker->addFunction('size', function (GearmanJob $job) {
+$client = new \Bavix\Gearman\Client();
+$client->addServer('127.0.0.1', 4730);
+
+$worker->addFunction('size', function (GearmanJob $job) use ($client) {
 
     $workload = $job->workload();
+
+    if (Common::cache()->get($workload))
+    {
+        return;
+    }
+
+    $client->doLowBackground('scan', $workload);
 
     $io   = popen('/usr/bin/du -sk \'' . str_replace('\'', '\\\'', $workload) . '\'', 'r');
     $size = fgets($io, 4096);
@@ -30,6 +40,31 @@ $worker->addFunction('size', function (GearmanJob $job) {
 
 });
 
-while ($worker->work()) {
+$worker->addFunction('scan', function (GearmanJob $job) use ($client) {
+
+    $workload = $job->workload();
+
+    if (!\Bavix\Helpers\Dir::isDir($workload))
+    {
+        return;
+    }
+
+    $dirs = scandir($workload, null);
+    unset($dirs[0], $dirs[1]);
+
+    foreach ($dirs as $dir)
+    {
+        if (!\Bavix\Helpers\Dir::isDir(\Bavix\SDK\Path::slash($workload) . $dir))
+        {
+            continue;
+        }
+
+        $client->doLowBackground('size', \Bavix\SDK\Path::slash($workload) . $dir);
+    }
+
+});
+
+while ($worker->work())
+{
     continue;
 }
