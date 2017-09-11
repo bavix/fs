@@ -6,6 +6,7 @@ use Bavix\Exceptions\NotFound\Page;
 use Bavix\Helpers\Arr;
 use Bavix\Helpers\Dir;
 use Bavix\Helpers\File;
+use Bavix\Helpers\Str;
 use Bavix\Helpers\Stream;
 use Bavix\Kernel\Common;
 
@@ -39,15 +40,29 @@ class Controller
             $tmp = new Tmp();
             shell_exec('cd ' . escapeshellcmd(dirname($string)) . '; zip -r \'' . $tmp . '\' \'' . escapeshellcmd(basename($string)) . '\' -0');
 
-            header('Content-Disposition: attachment; filename="' . basename($string) . '.zip"');
-            header('Content-Type: application/octet-stream');
-            header('Content-Description: File Transfer');
-            header('Content-Length: ' . filesize($tmp));
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Expires: 0');
-            readfile($tmp);
-            exit;
+            $filename = str_replace(['"', "'", ' ', ','], '_', basename($string));
+
+            header('X-Accel-Redirect: ' . $tmp, true);
+            header('Content-Type: application/zip', true);
+            header('Content-Disposition: inline;filename="' . $filename . '.zip"', true);
+            //header('Content-Description: File Transfer');
+            //header('Content-Length: ' . filesize($file_realpath));
+            //header('Content-Transfer-Encoding: binary');
+            //header('Cache-Control: must-revalidate');
+            //header('Accept-Ranges: bytes');
+            //header('Pragma: public');
+            header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 604800) . ' GMT', true);
+
+            die;
+
+//            header('Content-Disposition: attachment; filename="' . basename($string) . '.zip"');
+//            header('Content-Type: application/octet-stream');
+//            header('Content-Description: File Transfer');
+//            header('Content-Length: ' . filesize($tmp));
+//            header('Cache-Control: must-revalidate');
+//            header('Pragma: public');
+//            header('Expires: 0');
+//            readfile($tmp);
         }
 
         if (Dir::isDir($string))

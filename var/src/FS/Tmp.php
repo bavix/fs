@@ -21,17 +21,17 @@ class Tmp
      */
     public function __construct()
     {
-        $this->tmp = Path::slash(sys_get_temp_dir()) . Str::uniqid();
-        \register_shutdown_function([$this, '__destruct']);
+        $this->tmp = Path::slash(sys_get_temp_dir()) . Str::uniqid() . '.bxfs';
+//        \register_shutdown_function([$this, '__destruct']);
     }
 
-    /**
-     * shutdown
-     */
-    public function __destruct()
-    {
-        @unlink($this->tmp);
-    }
+//    /**
+//     * shutdown
+//     */
+//    public function __destruct()
+//    {
+//        @unlink($this->tmp);
+//    }
 
     /**
      * @return string
