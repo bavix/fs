@@ -72,7 +72,7 @@ class Controller
 
             return $this->twig()->render('directory.twig', [
                 'title'       => 'FS - ' . $this->uri(),
-                'breadcrumbs' => explode('/', rtrim($this->uri(), '/')),
+                'breadcrumbs' => explode('/', rtrim(urldecode($this->uri()), '/')),
                 'items'       => Arr::map($dir, function ($item) {
                     return new Item(Common::root(), $this->uri(), $item);
                 })
