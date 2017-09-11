@@ -38,13 +38,13 @@ class Controller
             $tmp = new Tmp();
             shell_exec('cd ' . escapeshellcmd(dirname($string)) . '; zip -r \'' . $tmp . '\' \'' . escapeshellcmd(basename($string)) . '\' -0');
 
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="' . basename($string) . '.zip"');
-            header('Expires: 0');
+            header('Content-Type: application/octet-stream');
+            header('Content-Description: File Transfer');
+            header('Content-Length: ' . filesize($tmp));
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
-            header('Content-Length: ' . filesize($tmp));
+            header('Expires: 0');
             readfile($tmp);
             exit;
         }
@@ -70,8 +70,9 @@ class Controller
             $dir = array_merge($folders, $files);
 
             return $this->twig()->render('directory.twig', [
-                'title' => 'FS - ' . $this->uri(),
-                'items' => Arr::map($dir, function ($item) {
+                'title'       => 'FS - ' . $this->uri(),
+                'breadcrumbs' => explode('/', rtrim($this->uri(), '/')),
+                'items'       => Arr::map($dir, function ($item) {
                     return new Item(Common::root(), $this->uri(), $item);
                 })
             ]);

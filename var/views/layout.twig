@@ -33,6 +33,27 @@
     </head>
     <body>
         <div class="container">
+
+            <ol class="breadcrumb">
+                {% set path = '/' %}
+                {% for breadcrumb in breadcrumbs %}
+                    {% if loop.last %}
+                        <li class="breadcrumb-item active">{{ breadcrumb | default('Home') }}</li>
+                    {% else %}
+                        {% if not loop.first %}
+
+                            {% if path == '/' %}
+                                {% set path = path ~ breadcrumb %}
+                            {% else %}
+                                {% set path = path ~ '/' ~ breadcrumb %}
+                            {% endif %}
+
+                        {% endif %}
+                        <li class="breadcrumb-item"><a href="{{ path }}">{{ breadcrumb | default('Home') }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+
             <ul class="list-group">
                 {% block content %}{% endblock %}
             </ul>

@@ -90,6 +90,17 @@ class Item
         return '/' . basename($this->root) . $this->uri . $this->name;
     }
 
+    public function du()
+    {
+        // todo
+        $io   = popen('/usr/bin/du -sk \'' . escapeshellcmd($this->path()) . '\'', 'r');
+        $size = fgets($io, 4096);
+        $size = substr($size, 0, strpos($size, "\t"));
+        pclose($io);
+
+        return $size;
+    }
+
     public function getSize()
     {
         if ($this->getName() === '..' || Dir::isDir($this->path()))
