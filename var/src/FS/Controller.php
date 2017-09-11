@@ -50,7 +50,7 @@ class Controller
 
             header('X-Accel-Redirect: ' . $tmp, true);
             header('Content-Type: application/zip', true);
-            header('Content-Disposition: inline;filename="' . $filename . '.zip"', true);
+            header('Content-Disposition: attachment;filename="' . $filename . '.zip"', true);
             header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 604800) . ' GMT', true);
             die;
         }
