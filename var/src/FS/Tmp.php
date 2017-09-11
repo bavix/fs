@@ -17,11 +17,13 @@ class Tmp
     /**
      * Tmp constructor.
      *
+     * @param string $string
+     *
      * @throws Runtime
      */
-    public function __construct()
+    public function __construct(string $string)
     {
-        $this->tmp = Path::slash(sys_get_temp_dir()) . Str::uniqid() . '.bxfs';
+        $this->tmp = Path::slash(sys_get_temp_dir()) . hash('md5', $string) . '.bxfs';
 //        \register_shutdown_function([$this, '__destruct']);
     }
 
