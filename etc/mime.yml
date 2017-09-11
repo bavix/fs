@@ -1,0 +1,33 @@
+# https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
+
+# images
+image: fa-file-image-o
+
+# audio
+audio: fa-file-audio-o
+
+# video
+video: fa-file-video-o
+
+# text
+text: fa-file-text-o
+
+# document
+application/pdf: fa-file-pdf-o
+application/json: fa-file-code-o
+application/msword: fa-file-word-o
+application/vnd.openxmlformats-officedocument.wordprocessingml.document: fa-file-word-o
+
+# Archives
+application/gzip: fa-file-archive-o
+application/zip: fa-file-archive-o
+application/x-gzip: fa-file-archive-o
+application/vnd.debian.binary-package: fa-archive
+
+# Misc
+application/octet-stream: fa-file-o
+
+# languages
+text/html: fa-file-code-o
+text/x-php: fa-file-code-o
+application/javascript: fa-file-code-o

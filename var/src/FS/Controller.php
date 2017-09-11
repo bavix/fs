@@ -17,7 +17,7 @@ class Controller
     {
         if (!$this->twig)
         {
-            $loader     = new \Twig_Loader_Filesystem(Common::var());
+            $loader     = new \Twig_Loader_Filesystem(Common::views());
             $this->twig = new \Twig_Environment($loader, ['debug' => true]);
 
             $this->twig->addExtension(new \Twig_Extension_Debug());

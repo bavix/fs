@@ -5,7 +5,22 @@
         <li class="list-group-item">
             <i class="fa {{ item.getIcon() }}" aria-hidden="true"></i>
             {% if item.getSize() %}
-                <span class="float-right badge badge-dark">{{ item.getSize() }}</span>
+                <div class="items float-right">
+                    <a download="{{ item.getName() }}" href="{{ item.getPath() }}" title="Download file">
+                        <span class="badge badge-danger">
+                            <i class="fa fa-download" aria-hidden="true"></i>
+                            Download
+                        </span>
+                    </a>
+                    <span class="badge badge-dark">{{ item.getSize() }}</span>
+                </div>
+            {% else %}
+                <a href="#">
+                    <span class="float-right badge {% if item.getName() == '..' %}badge-danger{% else %}badge-dark{% endif %}">
+                        <i class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        zip
+                    </span>
+                </a>
             {% endif %}
             <a href="{{ item.getPath() }}" title="{{ item.getName() }}">{{ item.getName() }}</a>
             <br />

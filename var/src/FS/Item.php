@@ -5,10 +5,14 @@ namespace Bavix\FS;
 use Bavix\Helpers\Dir;
 use Bavix\Helpers\File;
 use Bavix\Helpers\Str;
+use Bavix\Kernel\Common;
 use Bavix\SDK\Path;
+use Bavix\Slice\Slice;
 
 class Item
 {
+
+    protected $stat;
 
     protected $uri;
 
@@ -22,9 +26,19 @@ class Item
         $this->name = $name;
     }
 
+    protected function stat($type)
+    {
+        if (!$this->stat)
+        {
+            $this->stat = stat($this->path());
+        }
+
+        return $this->stat[$type] ?? null;
+    }
+
     protected function path()
     {
-        return $this->root . $this->uri . $this->getName();
+        return urldecode($this->root . $this->uri . $this->getName());
     }
 
     public function getIcon()
@@ -34,41 +48,22 @@ class Item
             return 'fa-folder';
         }
 
-        // List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
-        $font_awesome_file_icon_classes = array(
-            // Images
-            'image'                    => 'fa-file-image-o',
-            // Audio
-            'audio'                    => 'fa-file-audio-o',
-            // Video
-            'video'                    => 'fa-file-video-o',
-            // Documents
-            'application/pdf'          => 'fa-file-pdf-o',
-            'text/plain'               => 'fa-file-text-o',
-            'text/html'                => 'fa-file-code-o',
-            'application/json'         => 'fa-file-code-o',
-            // Archives
-            'application/gzip'         => 'fa-file-archive-o',
-            'application/zip'          => 'fa-file-archive-o',
-            // Misc
-            'application/octet-stream' => 'fa-file-o',
-        );
+        $mime = Common::cfg()->get('mime')->asArray();
+        $type = $this->getMimeType();
 
-        $mime = $this->getMimeType();
-
-        if ($mime)
+        if ($type)
         {
-            if (isset($font_awesome_file_icon_classes[$mime]))
+            if (isset($mime[$type]))
             {
-                return $font_awesome_file_icon_classes[$mime];
+                return $mime[$type];
             }
 
-            $mime_parts = explode('/', $mime, 2);
+            $mime_parts = explode('/', $type, 2);
             $mime_group = $mime_parts[0];
 
-            if (isset($font_awesome_file_icon_classes[$mime_group]))
+            if (isset($mime[$mime_group]))
             {
-                return $font_awesome_file_icon_classes[$mime_group];
+                return $mime[$mime_group];
             }
         }
 
@@ -78,7 +73,9 @@ class Item
     public function getMimeType()
     {
         if (File::isFile($this->path()))
-            return @finfo_file(finfo_open(FILEINFO_MIME_TYPE), $this->path());
+        {
+            return @mime_content_type($this->path());
+        }
 
         return null;
     }
@@ -100,7 +97,7 @@ class Item
             return false;
         }
 
-        return Str::fileSize(@filesize($this->path()));
+        return Str::fileSize($this->stat('size'));
     }
 
     public function getTime()
@@ -110,7 +107,7 @@ class Item
             return false;
         }
 
-        return date('d.m.Y H:i:s', @filemtime($this->path()));
+        return date('d.m.Y H:i:s', $this->stat('mtime'));
     }
 
     public function getName()

@@ -3,7 +3,8 @@
     "bavix/config": "^1.0",
     "bavix/kernel": "^1.0",
     "symfony/yaml": "^3.3",
-    "twig/twig": "~2.0"
+    "twig/twig": "~2.0",
+    "filp/whoops": "^2.1"
   },
   "autoload": {
     "psr-4": {
