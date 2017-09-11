@@ -2,6 +2,7 @@
 
 namespace Bavix\FS;
 
+use Bavix\Gearman\Client;
 use Bavix\Helpers\Dir;
 use Bavix\Helpers\File;
 use Bavix\Helpers\Str;
@@ -90,15 +91,25 @@ class Item
         return '/' . basename($this->root) . $this->uri . $this->name;
     }
 
-    public function du()
+    public function getFullSize()
     {
-        // todo
-        $io   = popen('/usr/bin/du -sk \'' . escapeshellcmd($this->path()) . '\'', 'r');
-        $size = fgets($io, 4096);
-        $size = substr($size, 0, strpos($size, "\t"));
-        pclose($io);
+        if ($this->getName() !== '..' && Dir::isDir($this->path()))
+        {
+            $size = Common::cache()
+                ->get($this->path());
 
-        return $size;
+            if ($size)
+            {
+                return Str::fileSize($size);
+            }
+
+            $client = new Client();
+            $client->addServer('127.0.0.1', 4730);
+
+            $client->doLowBackground('size', $this->path());
+        }
+
+        return false;
     }
 
     public function getSize()

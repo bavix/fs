@@ -3,32 +3,43 @@
 {% block content %}
     {% for item in items %}
         <li class="list-group-item">
-            <i class="fa {{ item.getIcon() }}" aria-hidden="true"></i>
+
+            {% set full = item.getFullSize() %}
+            {% set icon = item.getIcon() %}
+            {% set name = item.getName() %}
+            {% set path = item.getPath() %}
+            {% set size = item.getSize() %}
+            {% set time = item.getTime() %}
+
+            <i class="fa {{ icon }}" aria-hidden="true"></i>
 
             <div class="items float-right">
-                {% if not item.getSize() and item.getName() != '..' %}
-                    <a download="{{ item.getName() }}.zip" href="{{ item.getPath() }}?download=zip" title="Download zip-archive">
+                {% if not size and name != '..' %}
+                    <a download="{{ name }}.zip" href="{{ path }}?download=zip" title="Download zip-archive">
                             <span class="badge badge-dark">
                                 <i class="fa fa-file-archive-o" aria-hidden="true"></i>
                                 zip
                             </span></a>
                 {% endif %}
 
-                {% if item.getSize() %}
-                    <a download="{{ item.getName() }}" href="{{ item.getPath() }}" title="Download file">
+                {% if size %}
+                    <a download="{{ name }}" href="{{ path }}" title="Download file">
                         <span class="badge badge-danger">
                             <i class="fa fa-download" aria-hidden="true"></i>
                             Download
                         </span></a>
 
-                    <span class="badge badge-primary">{{ item.getSize() }}</span>
+                    <span class="badge badge-primary">{{ size }}</span>
+
+                {% elseif full %}
+                    <span class="badge badge-warning">~ {{ full }}</span>
                 {% endif %}
             </div>
 
-            <a href="{{ item.getPath() }}" title="{{ item.getName() }}">{{ item.getName() }}</a>
+            <a href="{{ path }}" title="{{ name }}">{{ name }}</a>
             <br />
 
-            <small>{{ item.getTime() }}</small>
+            <small>{{ time }}</small>
         </li>
     {% endfor %}
 {% endblock %}

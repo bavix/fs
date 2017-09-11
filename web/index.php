@@ -58,6 +58,7 @@ Common::bind('views', function () {
     return Common::var() . 'views/';
 });
 
+Common::bind('cache', Bavix\FS\Cache::class);
 Common::bind('init', Bavix\FS\Controller::class);
 
 $kernel = Common::init();
