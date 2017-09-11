@@ -12,19 +12,20 @@ use Bavix\Kernel\Common;
 class Controller
 {
 
-    protected $twig;
+    /**
+     * Controller constructor.
+     */
+    public function __construct()
+    {
+        Common::debug();
+    }
 
+    /**
+     * @return \Twig_Environment
+     */
     protected function twig()
     {
-        if (!$this->twig)
-        {
-            $loader     = new \Twig_Loader_Filesystem(Common::views());
-            $this->twig = new \Twig_Environment($loader, ['debug' => true]);
-
-            $this->twig->addExtension(new \Twig_Extension_Debug());
-        }
-
-        return $this->twig;
+        return Common::twig();
     }
 
     protected function reader($string)
@@ -78,7 +79,7 @@ class Controller
             ]);
         }
 
-        throw new Page('File `' . $string . '` not found');
+        throw new Page('Path `' . $string . '` not found');
     }
 
     protected function uri()
