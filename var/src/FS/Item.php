@@ -121,7 +121,7 @@ class Item
             $this->_fileSize = exec('stat -c %s "' . str_replace('"', '\"', $this->path()));   
         }
         
-        return $this->fileSize;
+        return $this->_fileSize;
     }
 
     public function getSize()
