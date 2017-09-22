@@ -111,6 +111,18 @@ class Item
 
         return false;
     }
+    
+    protected $_fileSize;
+    protected function _getSize()
+    {
+        if (!$this->_fileSize)
+        {
+            // todo: убрать этот костыль!
+            $this->_fileSize = exec('stat -c %s "' . str_replace('"', '\"', $this->path()));   
+        }
+        
+        return $this->fileSize;
+    }
 
     public function getSize()
     {
@@ -119,7 +131,7 @@ class Item
             return false;
         }
 
-        return Str::fileSize($this->stat('size'));
+        return Str::fileSize($this->_getSize());
     }
 
     public function getTime()
